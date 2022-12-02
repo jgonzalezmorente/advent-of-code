@@ -7,9 +7,9 @@ if __name__ == '__main__':
 
 
     with open( inputs ) as f:    
-        input = [ line.strip() for line in f ]
+        inputs_ = [ line.strip() for line in f ]
     
-    calories = split_lists_numbers( input )    
+    calories = split_lists_numbers( inputs_ )
     sum_list = list( map( sum, calories )  )
   
     print(max(sum_list))
