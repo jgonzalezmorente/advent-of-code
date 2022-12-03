@@ -16,8 +16,3 @@ if __name__ == '__main__':
 
     sum_list.sort( reverse = True )    
     print(sum(sum_list[:3]))
-
-
-
-
-    

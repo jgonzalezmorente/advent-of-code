@@ -13,7 +13,6 @@ def split_lists_numbers( list ):
     output.append( partial_list )
     return output
 
-
 def get_score( r ):
 
     # A, X -> Piedra
@@ -55,3 +54,15 @@ def get_move( r ):
     }
 
     return moves[r]
+
+def get_compartiments( rucksack ):
+    m = ( len(rucksack) // 2 )
+    compartiment_1 = rucksack[:m]
+    compartiment_2 = rucksack[m:]
+    intersection = list( set(compartiment_1) & set(compartiment_2) )
+    return compartiment_1, compartiment_2, intersection
+
+def get_priority( letter ):
+    s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    return s.index( letter ) + 1
+

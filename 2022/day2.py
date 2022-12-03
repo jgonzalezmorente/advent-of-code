@@ -11,10 +11,3 @@ if __name__ == '__main__':
 
     print(sum( map( get_score, inputs_ ) ))
     print(sum( map( get_score, map( get_move, inputs_ ) )))
-
-
-    
-
-
-
-    
