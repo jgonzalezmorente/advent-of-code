@@ -66,3 +66,10 @@ def get_priority( letter ):
     s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     return s.index( letter ) + 1
 
+def section_to_set( section ):
+    lims = section.split('-')
+    return set(range(int(lims[0]), int(lims[1])+1))
+
+def sections_to_pairs_sets( sections ):
+    sections_list = sections.split(',')
+    return [ section_to_set(sections_list[0]), section_to_set(sections_list[1]) ]    
