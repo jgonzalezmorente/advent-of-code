@@ -96,5 +96,10 @@ def parse_movements( movements ):
         l = move.split()    
         result.append( { 'count': int(l[1]), 'from': int(l[3]) - 1, 'to': int(l[5]) - 1 } )
     return result
+
+def get_first_marker( datastream, length = 4 ):
+    for i in range( length, len(datastream) + 1 ):
+        if len( set(datastream[i - length : i]) ) == length:
+            return i
     
 
