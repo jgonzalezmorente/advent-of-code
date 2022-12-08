@@ -1,3 +1,5 @@
+import numpy as np
+
 
 def split_lists_numbers( list ):
     output = []
@@ -102,4 +104,22 @@ def get_first_marker( datastream, length = 4 ):
         if len( set(datastream[i - length : i]) ) == length:
             return i
     
+def tree_is_visible( height, west, east, north, south ):
+    
+    if ( west.size * east.size * north.size * south.size ) == 0:
+        return True
+
+    return ( max( west ) < height or max( east ) < height or max( north ) < height or max( south ) < height )
+    
+def tree_score_direction( height, direction ):
+    return np.where( direction >= height )[0][0] + 1 if np.where( direction >= height )[0].size > 0 else direction.size
+
+def tree_score( height, west, east, north, south ):
+    return ( tree_score_direction( height, np.flip( west ) ) * 
+             tree_score_direction( height, east ) * 
+             tree_score_direction( height, np.flip( north ) ) *
+             tree_score_direction( height, south ) ) 
+
+
+
 
