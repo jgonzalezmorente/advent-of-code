@@ -121,5 +121,44 @@ def tree_score( height, west, east, north, south ):
              tree_score_direction( height, south ) ) 
 
 
+def together( knot1, knot2 ):
+    return max( abs( knot1[0] - knot2[0] ), abs( knot1[1] - knot2[1] ) ) < 2
+    
+def tail_to_head( tail , head ):
+
+    if together( head, tail ):
+        return tail
+    else:
+        x = tail[ 0 ]
+        if head[ 0 ] > tail[ 0 ]:
+            x = tail[ 0 ] + 1
+        elif head[ 0 ] < tail[ 0 ]:
+            x = tail[ 0 ] - 1
+            
+        y = tail[ 1 ]                
+        if head[ 1 ] > tail[ 1 ]:
+            y = tail[ 1 ] + 1
+        elif head[ 1 ] < tail[ 1 ]:
+            y = tail[ 1 ] - 1
+
+        return (x, y)
+
+def move_rope( head, tail, move ):
+    if move == 'R':
+        new_head = ( head[0] + 1, head[1] )
+    elif move == 'L':
+        new_head = ( head[0] - 1, head[1] )
+    elif move == 'U':
+        new_head = ( head[0], head[1] + 1 )
+    elif move == 'D':
+        new_head = ( head[0], head[1] - 1 )
+
+    if together( new_head, tail ):
+        return new_head, tail
+    else:
+        return new_head, head    
+    
+
+
 
 
