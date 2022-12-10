@@ -120,7 +120,6 @@ def tree_score( height, west, east, north, south ):
              tree_score_direction( height, np.flip( north ) ) *
              tree_score_direction( height, south ) ) 
 
-
 def together( knot1, knot2 ):
     return max( abs( knot1[0] - knot2[0] ), abs( knot1[1] - knot2[1] ) ) < 2
     
@@ -157,8 +156,3 @@ def move_rope( head, tail, move ):
         return new_head, tail
     else:
         return new_head, head    
-    
-
-
-
-

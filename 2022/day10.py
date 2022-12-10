@@ -11,21 +11,41 @@ if __name__ == '__main__':
 
     counter = Counter( map( lambda i: i[0], inputs_) )
     total_cycles = counter['noop'] + counter['addx'] * 2 
-    cycles = [ { 'cycle': c + 1, 'register': 0  } for c in range( total_cycles ) ]
+    cycles = [ { 'cycle': c + 1, 'register': 0 } for c in range( total_cycles ) ]
 
     pointer = 0
     register = 1
     for i in inputs_:
-        if i[0] == 'addx':
+        if i[0] == 'addx':            
             cycles[ pointer ]['register'] = register
             cycles[ pointer + 1 ]['register'] = register
+
             pointer += 2
             register += int( i[1] )
-
+        
         elif i[0] == 'noop':
-            cycles[ pointer ]['register'] = register
+            cycles[ pointer ]['register'] = register            
             pointer += 1
-
     
     cycles_sol = filter( lambda c: ( c['cycle'] - 20 ) % 40 == 0 and c['cycle'] <= 220,  cycles )
     print( reduce( lambda acc, c: acc + c['cycle'] * c['register'], cycles_sol, 0 ) )
+
+    screen = []
+    line = []
+    for k in range( 240 ):
+        line.append( ' ' )
+        if ( ( k + 1 ) % 40 == 0 ):
+            screen.append( line )
+            line = []
+    
+    for c in cycles:
+        row = ( c[ 'cycle' ] - 1 ) // 40 
+        column = ( c[ 'cycle' ] - 1 ) % 40 
+
+        if column in [ c['register'] - 1, c['register'], c['register'] + 1 ]:        
+            screen[ row ][ column ] = '#'
+        else:
+            screen[ row ][ column ] = '.'
+    
+    for r in screen:
+        print (''.join(r))
