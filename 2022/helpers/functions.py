@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def split_lists_numbers( list ):
     output = []
     partial_list = []
@@ -19,7 +18,7 @@ def get_score( r ):
 
     # A, X -> Piedra
     # B, Y -> Papel
-    # C, Z -> Tijera    
+    # C, Z -> Tijera
 
     values = {
         'X': 1,
@@ -37,12 +36,11 @@ def get_score( r ):
         'CX': 6, # Tijera - Piedra => Gano
         'CY': 0, # Tijera - Papel => Pierdo
         'CZ': 3  # Tijera - Tiejra => Empate
-    }    
+    }
 
     return game_score[r] + values[r[1]]
-            
-def get_move( r ):
 
+def get_move( r ):
     moves = {
         'AX': 'AZ', # Piedra - perder => Tijera
         'AY': 'AX', # Piedra - empatar  => Piedra
@@ -77,25 +75,24 @@ def sections_to_pairs_sets( sections ):
     return [ section_to_set(sections_list[0]), section_to_set(sections_list[1]) ]
 
 def parse_stacks( stacks ):
-    
     num_stacks = ( len(stacks[0]) + 1 ) // 4
 
     result = []
     for _ in range(num_stacks):
          result.append([])
-    
+
     for s in stacks:
         for k in range(num_stacks):
             crate = s[ 1 + 4 * k ].strip()
             if crate:
                 result[k].insert( 0, crate )
-    
+
     return result
 
 def parse_movements( movements ):
     result = []
     for move in movements:
-        l = move.split()    
+        l = move.split()
         result.append( { 'count': int(l[1]), 'from': int(l[3]) - 1, 'to': int(l[5]) - 1 } )
     return result
 
@@ -103,28 +100,27 @@ def get_first_marker( datastream, length = 4 ):
     for i in range( length, len(datastream) + 1 ):
         if len( set(datastream[i - length : i]) ) == length:
             return i
-    
+
 def tree_is_visible( height, west, east, north, south ):
-    
+
     if ( west.size * east.size * north.size * south.size ) == 0:
         return True
 
     return ( max( west ) < height or max( east ) < height or max( north ) < height or max( south ) < height )
-    
+
 def tree_score_direction( height, direction ):
     return np.where( direction >= height )[0][0] + 1 if np.where( direction >= height )[0].size > 0 else direction.size
 
 def tree_score( height, west, east, north, south ):
-    return ( tree_score_direction( height, np.flip( west ) ) * 
-             tree_score_direction( height, east ) * 
+    return ( tree_score_direction( height, np.flip( west ) ) *
+             tree_score_direction( height, east ) *
              tree_score_direction( height, np.flip( north ) ) *
-             tree_score_direction( height, south ) ) 
+             tree_score_direction( height, south ) )
 
 def together( knot1, knot2 ):
     return max( abs( knot1[0] - knot2[0] ), abs( knot1[1] - knot2[1] ) ) < 2
-    
-def tail_to_head( tail , head ):
 
+def tail_to_head( tail , head ):
     if together( head, tail ):
         return tail
     else:
@@ -133,8 +129,8 @@ def tail_to_head( tail , head ):
             x = tail[ 0 ] + 1
         elif head[ 0 ] < tail[ 0 ]:
             x = tail[ 0 ] - 1
-            
-        y = tail[ 1 ]                
+
+        y = tail[ 1 ]
         if head[ 1 ] > tail[ 1 ]:
             y = tail[ 1 ] + 1
         elif head[ 1 ] < tail[ 1 ]:
@@ -155,4 +151,52 @@ def move_rope( head, tail, move ):
     if together( new_head, tail ):
         return new_head, tail
     else:
-        return new_head, head    
+        return new_head, head
+
+def add_previous_step( current_path, S, heightmap ):
+    head = current_path[0]
+    if head == S:        
+        return [ current_path ]
+
+    r = ( head[0] + 1, head[1], head[2] - 1 )
+    r_ = ( r[0], r[1], head[2] )
+
+    d = ( head[0], head[1] + 1, head[2] - 1 )
+    d_ = ( d[0], d[1], head[2] )
+
+    l = ( head[0] - 1, head[1], head[2] - 1 )
+    l_ = ( l[0], l[1], head[2] )
+
+    t = ( head[0], head[1] - 1, head[2] - 1 )
+    t_ = ( t[0], t[1], head[2] )
+
+    def add_to_path( p, current_path ):
+        path = current_path.copy()
+        path.insert( 0, p )
+        return path
+
+    return [ add_to_path( p, current_path ) for p in [ r, r_, d, d_, l, l_, t, t_ ] if not p in current_path and p in heightmap ]
+
+def paths_from_to( S, E, heightmap, paths = None ):
+    if paths is None:
+        paths = [[E]]
+
+    new_paths = []
+    for path in paths:        
+        new_paths.extend( add_previous_step( path, S, heightmap ) )
+
+    if new_paths == paths:
+        return paths
+    else:
+        return paths_from_to( S, E, heightmap, paths = new_paths )
+
+def paths_from_to_no_recursive( S, E, heightmap ):
+    # paths = [[E]]
+    paths = []
+    new_paths =  [[E]]
+    while new_paths != paths:
+        paths = new_paths
+        new_paths = []
+        for path in paths:
+            new_paths.extend( add_previous_step( path, S, heightmap ) )
+    return new_paths

@@ -85,3 +85,93 @@ class Monkey:
                 self.test( self.operation( int( worry_level ) ) // 3  )
             else:            
                 self.test( self.operation( int( worry_level ) % module ) )
+
+class Dijkstra:
+    def __init__( self,  heightmap ):
+        self.heightmap = heightmap
+        self.distance = [ None for _ in range( len( heightmap ) ) ]
+        self.visited = set()
+        self.current_node = None
+
+    def is_neighbor( self, node ):
+        return ( ( ( node[0] == self.current_node[0] + 1 and node[1] == self.current_node[1] ) or
+                 ( node[0] == self.current_node[0] and node[1] == self.current_node[1] + 1 ) or
+                 ( node[0] == self.current_node[0] - 1 and node[1] == self.current_node[1] ) or
+                 ( node[0] == self.current_node[0] and node[1] == self.current_node[1] - 1 ) ) and ( node[-1] <= self.current_node[-1] + 1 )
+        )
+
+    def neighbors( self ):
+        d = self.distance[ self.heightmap.index( self.current_node ) ]
+        for neighbor in [ p for p in self.heightmap if self.is_neighbor( p ) and not p in self.visited ]:            
+            neighbor_d = d + 1
+            i = self.heightmap.index( neighbor )
+            if self.distance[ i ] is None or self.distance[ i ] > neighbor_d:
+                self.distance[ i ] = neighbor_d
+
+    def set_current_node( self, S = None ):
+        self.current_node = None
+        if S:
+            self.current_node = S
+            return
+
+        nodes = []
+        for i, d in enumerate( self.distance ):
+            if d != None:
+                node = self.heightmap[ i ]
+                if not node in self.visited:
+                    nodes.append( ( node, d ) )
+    
+        if nodes:
+            nodes.sort( key = lambda n : n[-1] )
+            self.current_node = nodes[0][0]
+
+    def start_from( self, S ):
+        self.set_current_node( S )
+        self.visited.add( self.current_node )
+        print(f'{ len( self.visited ) } de { len( self.heightmap ) }')
+        self.distance[ self.heightmap.index( self.current_node ) ] = 0
+ 
+        while len( self.visited ) < len( self.heightmap ) and self.current_node:
+            self.neighbors()
+            self.set_current_node()
+            self.visited.add( self.current_node )
+            print(f'{ len( self.visited ) } de { len( self.heightmap ) }')
+
+
+class Tree:
+    heightmap = []
+    target_distances = []    
+
+    def __init__( self, node, father = None ):
+        self.node = node
+        self.father = father
+        if father is None:
+            self.depth = 0
+            self.fathers = []
+        else:
+            self.fathers = father.fathers
+            self.fathers.append( father.node )
+            self.depth = father.depth + 1
+
+        self.children = []
+        self.target_distances.append( ( self.node, self.depth ) )
+
+    
+    def is_child( self, node ):
+        return ( ( ( node[0] == self.node[0] + 1 and node[1] == self.node[1] ) or
+                 ( node[0] == self.node[0] and node[1] == self.node[1] + 1 ) or
+                 ( node[0] == self.node[0] - 1 and node[1] == self.node[1] ) or
+                 ( node[0] == self.node[0] and node[1] == self.node[1] - 1 ) ) and ( node[-1] <= self.node[-1] + 1 )
+                 and ( not node in self.fathers )
+        )
+
+    def search_children( self ):
+        self.children = [ Tree( node, father = self ) for node in Tree.heightmap if self.is_child( node ) ]        
+
+    def build( self ):
+        self.search_children()
+        if len( self.children ) == 0:
+            return
+        
+        for child in self.children:
+            child.build()
