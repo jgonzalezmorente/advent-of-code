@@ -127,15 +127,13 @@ class Dijkstra:
 
     def start_from( self, S ):
         self.set_current_node( S )
-        self.visited.add( self.current_node )
-        print(f'{ len( self.visited ) } de { len( self.heightmap ) }')
+        self.visited.add( self.current_node )        
         self.distance[ self.heightmap.index( self.current_node ) ] = 0
  
         while len( self.visited ) < len( self.heightmap ) and self.current_node:
             self.neighbors()
             self.set_current_node()
-            self.visited.add( self.current_node )
-            print(f'{ len( self.visited ) } de { len( self.heightmap ) }')
+            self.visited.add( self.current_node )            
 
 
 class Tree:

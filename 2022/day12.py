@@ -22,6 +22,23 @@ if __name__ == '__main__':
  
             heightmap.append( point )
     
-    dijkstra = Dijkstra( heightmap )
-    dijkstra.start_from( S )
-    print( dijkstra.distance[ heightmap.index( E )])
+    # dijkstra = Dijkstra( heightmap )
+    # dijkstra.start_from( S )
+    # print( f'Part 1: { dijkstra.distance[ heightmap.index( E )] }')
+
+    distances = []
+    initial_points = list( filter( lambda p: p[-1] in [0, 1], heightmap ) )
+    for i, p in enumerate( initial_points ):
+        print(f'Point { i + 1 } of { len(initial_points) }')
+        dijkstra = Dijkstra( heightmap )
+        dijkstra.start_from( p )
+        if dijkstra.distance[ heightmap.index( E ) ]:
+            distances.append( dijkstra.distance[ heightmap.index( E ) ] )
+            print ( min(distances) )
+
+    print( f'Part 2: { min(distances) }' )
+
+
+
+
+
