@@ -11,22 +11,26 @@ if __name__ == '__main__':
 
     with open( inputs ) as f:
         for line in f:
-            line = line.strip().split()
+            line_ = line.strip().split()
 
-            if line[0] == '$':
-                if line[1] == 'cd':                    
-                    if line[2] == '/':
+            if line_[0] == '$':
+                if line_[1] == 'cd':                    
+                    if line_[2] == '/':
                         current_directory = root
-                    elif line[2] == '..':
+                    elif line_[2] == '..':
+                        assert current_directory is not None
                         current_directory = current_directory.parent
                     else:
-                        current_directory = current_directory.get_subdirectory( line[2] )               
+                        assert current_directory is not None
+                        current_directory = current_directory.get_subdirectory( line_[2] )
 
-            elif line[0] == 'dir':
-                current_directory.directories.append( Directory(line[1], current_directory ) )
+            elif line_[0] == 'dir':
+                assert current_directory is not None
+                current_directory.directories.append( Directory(line_[1], current_directory ) )
 
             else:
-                current_directory.files.append({ 'size': int(line[0] ), 'name': line[1] })
+                assert current_directory is not None
+                current_directory.files.append({ 'size': int(line_[0] ), 'name': line_[1] })
 
     total_size = root.get_size()    
     

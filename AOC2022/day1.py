@@ -5,7 +5,6 @@ if __name__ == '__main__':
     inputs = 'inputs/day1/input.txt'
     sample = 'samples/day1/sample.txt'
 
-
     with open( inputs ) as f:    
         inputs_ = [ line.strip() for line in f ]
     

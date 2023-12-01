@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from functools import reduce, total_ordering
 import operator
 
@@ -32,7 +33,7 @@ class Directory:
 
 class Monkey:
 
-    __instances = []
+    __instances: List['Monkey'] = []
 
     @classmethod
     def start_round( cls, part2 = False ):
@@ -51,7 +52,7 @@ class Monkey:
         self.starting_items = []        
         self.inspected_items = 0
         self.operator = ''
-        self.paramter = ''
+        self.parameter = ''
         self.divider = 1
         self.monkey_true = 0
         self.monkey_false = 0
@@ -137,8 +138,8 @@ class Dijkstra:
 
 
 class Tree:
-    heightmap = []
-    target_distances = []    
+    heightmap: List[Tuple[int, int, int]] = []
+    target_distances: List[int] = []    
 
     def __init__( self, node, father = None ):
         self.node = node
