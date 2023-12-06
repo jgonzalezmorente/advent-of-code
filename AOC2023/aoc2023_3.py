@@ -99,13 +99,4 @@ if __name__ == '__main__':
 
     fun = partial( get_gear_value, engine = engine, parts = parts )
     print( sum( map(fun, [ k for k, v in engine.items() if v == '*' ]) ) )
-
-    #def get_gear_value( key: Tuple, engine: Engine, parts: Parts ) -> int:
-
-
-
-
-                
-
-
-
+    

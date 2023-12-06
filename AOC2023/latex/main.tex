@@ -1,0 +1,126 @@
+\documentclass[a4paper,12pt]{article}
+
+\input{config.tex}
+\title{Advent of Code 2023 }
+\author{José Antonio González Morente}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Día 5: \textnormal{ \it If You Give A Seed A Fertilizer}}
+
+El problema consiste en encontrar el número de ubicación más bajo que corresponde a cualquiera de los números iniciales de semillas, utilizando una serie de mapas proporcionados en un fichero. Estos mapas convierten números de una categoría (como semillas) en números de otra categoría (como suelo, fertilizante, agua, luz, temperatura, humedad y ubicación). Cada mapa contiene rangos de números y muestra cómo convertir un número de una categoría fuente a un número en una categoría destino. El objetivo es seguir las conversiones a través de las categorías para cada número de semilla inicial y determinar cuál es el número de ubicación más bajo correspondiente. En la segunda parte, se introduce una complicación adicional: los números iniciales de semillas representan rangos de números, lo que significa que se deben considerar varios números de semillas en lugar de solo uno.
+
+
+Para ver el enunciado completo de este problema, consulta el siguiente enlace: 
+\\
+\href{https://adventofcode.com/2023/day/5}{https://adventofcode.com/2023/day/5}.
+
+\subsection{Parte I}
+
+\lstset{language=Python, basicstyle=\ttfamily, keywordstyle=\color{blue}}
+
+El objetivo de esta parte es determinar la ubicación óptima para cada semilla, partiendo de una lista de semillas proporcionada en el archivo de texto de entrada. Para lograr esto, se implementa un enfoque secuencial y compuesto, donde cada etapa del proceso transforma la información de una forma a otra, comenzando con las semillas y pasando por diferentes fases como suelo, fertilizante, agua, luz, temperatura, humedad, y finalmente, ubicación.
+
+\begin{enumerate}
+    \item \textbf{Definición de la clase \texttt{Map}:}
+    \begin{itemize}
+        \item Se define una clase llamada \lstinline{Map}, que hereda de \lstinline{dict}.
+        \item A la clase \lstinline{Map} se le añade un atributo \lstinline{__ranges}. Este atributo es una lista de tuplas, definida como \lstinline{List[Tuple[range, int]]}, para almacenar los intervalos de mapeo.
+        \item Cada tupla en \lstinline{__ranges} contiene dos elementos: un rango de origen (\lstinline{range}) y un valor inicial del rango destino (\lstinline{int}).
+    \end{itemize}
+
+    \item \textbf{Redefinición del método \texttt{\_\_missing\_\_}:}
+    \begin{itemize}
+        \item Se redefine el método especial \lstinline{__missing__}, que se invoca automáticamente cuando se intenta acceder a una clave ausente en el diccionario.
+        
+        \item Si la clave $k$ está en un rango $r$ de \lstinline{__ranges}, se calcula su valor mediante la siguiente expresión: $r[1] + (k - r[0][0])$.  Esto es simplemente una traslación de la clave al intervalo destino, ya que es así como nos dicen en el enunciado que funciona el mapeo.
+
+        \item Si la clave no se encuentra en \lstinline{__ranges}, el método devuelve la propia clave. El enunciado del problema nos dice que cuando la clave no pertenece al intervalo, su valor es la propia clave.
+    \end{itemize}
+
+    \item \textbf{Método \texttt{add\_range}:}
+    \begin{itemize}
+        \item Se añade el método \lstinline{add_range}, que transforma una cadena de texto procedente del fichero, en una tupla $(r,s)$ donde $r$ es el rango origen y $s$ es el valor inicial del rango destino, y lo añade a \lstinline{__ranges}.
+    \end{itemize}
+    \item \textbf{Método \texttt{to\_fun}:}
+    \begin{itemize}
+        \item Este método devuelve una función cuyo propósito es mapear cada clave a su valor correspondiente, actuando efectivamente como una representación funcional del diccionario. Esta función toma una clave como entrada y retorna el valor asociado dentro del diccionario. Si la clave existe en el diccionario, devuelve su valor asociado directamente. En caso contrario, la función aplica la lógica definida en el método \lstinline{__missing__} para determinar y retornar un valor adecuado. De esta manera, el método convierte el diccionario, que es una estructura de datos estática, en una entidad dinámica y funcional que puede interactuar con otras partes del programa de manera más flexible y versátil.
+    \end{itemize}
+    
+    
+    \item \textbf{Definición de la función \texttt{set\_map}:}
+    \begin{itemize}
+        \item Esta función recibe dos parámetros principales: un objeto \lstinline{TextIOWrapper} y un objeto de la clase \lstinline{Map}. El objeto \lstinline{TextIOWrapper} se obtiene al abrir un archivo de texto, proporcionando una interfaz para leer su contenido. La función itera a través de cada línea del archivo, donde cada línea representa un intervalo específico. Utiliza el método \lstinline{add_range} de la clase \lstinline{Map} para procesar y añadir estos intervalos al mapa. Este proceso implica la transformación de la representación textual de cada intervalo en un objeto \lstinline{range}, que luego se incorpora a la estructura de datos del mapa para su posterior uso y consulta.
+    \end{itemize}
+    
+    \item \textbf{Proceso principal:}
+    \begin{itemize}
+        \item \textbf{Creación de objetos \lstinline{Map}:}
+        Se instancian varios objetos de la clase \lstinline{Map} para representar diferentes etapas del proceso. Cada \lstinline{Map} se asocia con una fase específica, como se muestra a continuación:
+        \begin{lstlisting}
+        seed_to_soil = Map()
+        soil_to_fertilizer = Map()
+        fertilizer_to_water = Map()
+        water_to_light = Map()
+        light_to_temperature = Map()
+        temperature_to_humidity = Map()
+        humidity_to_location = Map()
+        \end{lstlisting}
+        Estos mapas se utilizarán para relacionar distintas etapas del proceso, como semillas a suelo, suelo a fertilizante, y así sucesivamente.
+    
+        \item \textbf{Procesamiento del archivo de texto:}
+        Se realiza parseo del archivo de texto para obtener una lista de elementos denominada \lstinline{seeds}. Por otro lado, utilizando el método \lstinline{add_range}, se informan los intervalos correspondientes en cada uno de los mapas creados anteriormente. Este proceso implica leer y transformar la información del archivo en una serie de rangos que se incorporan a los mapas, permitiendo así crear una cadena de relaciones entre las diferentes fases del proceso.
+
+        \item \textbf{Composición de funciones:}
+        Se implementa una función denominada \lstinline{compose} cuyo propósito es componer dos funciones dadas, $f$ y $g$. La composición de estas funciones se define matemáticamente como $compose(f, g) = g \circ f$, lo que significa que, para un argumento dado $x$, la función compuesta $(g \circ f)(x)$ es igual a $g(f(x))$.
+    
+        Esta técnica se aplica a los objetos \lstinline{Map} creados anteriormente. Cada \lstinline{Map} se asocia con una función específica (método \lstinline{to_fun}), y estas funciones se almacenan en una lista. Posteriormente, se utiliza la función \lstinline{reduce} para combinar secuencialmente todas estas funciones en una sola función compuesta, mediante la aplicación reiterada de \lstinline{compose}.
+    
+        La función compuesta final resultante se aplica entonces a la lista de semillas (\lstinline{seeds}). Este proceso permite transformar cada semilla a través de todas las etapas representadas por los mapas de forma secuencial y eficiente. Como resultado, se puede obtener el valor mínimo de ubicación deseado.
+        
+        
+    \end{itemize}
+        
+\end{enumerate}
+\subsection{Parte II}
+
+El objetivo sigue siendo encontrar la ubicación óptima para el cultivo, pero ahora con la complejidad añadida de manejar intervalos extensos de semillas. La magnitud de estos intervalos descarta el uso de métodos de fuerza bruta, requiriendo en su lugar un enfoque más eficiente.
+
+Se considera el uso de funciones lineales del tipo $f: \mathbb{R} \longrightarrow \mathbb{R}$, definidas como $f(x) = \alpha + x$, donde $\alpha$ es una constante. Estas funciones tienen la propiedad de transformar intervalos de la forma $[a, b]$ en $[f(a), f(b)]$. Este tipo de transformaciones son las que se están realizando, por lo que podemos aplicar esta propiedad.
+
+La estrategia implica aplicar un proceso de composición de funciones similar al desarrollado en la Parte I, pero adaptado para trabajar con intervalos en lugar de valores específicos de semillas. En este contexto, cada función lineal aplicada a un intervalo de semillas transforma este intervalo en otro, reflejando la acumulación de cambios a lo largo del proceso.
+
+Al final de este proceso compuesto, se obtendrá un conjunto de intervalos transformados. El paso final consiste en identificar el intervalo con el extremo inferior mínimo. Este intervalo representa el rango óptimo de semillas que, después de todas las transformaciones, resulta en la ubicación más favorable. 
+
+\begin{enumerate}
+    \item \textbf{Método \texttt{\_\_project\_interval}:} \\
+    Este método toma como entrada un intervalo $[a, b]$ y realiza un proceso de búsqueda y transformación en varias etapas:
+    \begin{enumerate}
+        \item \textit{Búsqueda de rangos relevantes:} Inicialmente, el método identifica todos los rangos dentro de \lstinline{self.__ranges} cuyos extremos se encuentran entre $a$ y $b$. Esta búsqueda efectiva segmenta el intervalo original $[a, b]$ en varios subintervalos.
+
+        \item \textit{Partición en subintervalos:} A partir de los rangos identificados, se genera una partición de $[a, b]$. Cada subintervalo resultante es una porción del intervalo original que está influenciada por uno o más rangos en \lstinline{self.__ranges}.
+
+        \item \textit{Transformación de subintervalos:} Debido a la naturaleza lineal y creciente de la transformación, mencionada anteriormente, es suficiente transformar únicamente los extremos de cada subintervalo. Esta transformación se aplica a los puntos extremos, generando nuevos intervalos que son la proyección de los subintervalos originales a través de la función de transformación.
+    \end{enumerate}
+    El método concluye devolviendo una lista de estos subintervalos transformados. Cada subintervalo transformado refleja una parte del intervalo original $[a, b]$ después de haber sido procesado a través de las transformaciones definidas.
+
+    \item \textbf{Método \texttt{\_\_project\_intervals}:} \\
+    Este método toma una lista de intervalos, aplica \lstinline{__project_interval} a cada uno de ellos, y devuelve una lista de todos los intervalos transformados. Este método sería útil en situaciones donde se necesita aplicar la misma transformación a múltiples intervalos y recopilar todos los resultados en una única lista.
+
+    \item \textbf{Proceso principal}:
+    \begin{itemize}
+        \item \textbf{Procesamiento inicial de los intervalos de semillas:}
+        En la primera fase, se extraen los intervalos de semillas del archivo de texto. Cada par de números en el archivo representa un intervalo de semillas, donde el primer número indica el extremo inferior del intervalo y el segundo número representa la longitud del mismo. De esta manera, se convierte la fila de semillas del archivo en una serie de intervalos concretos que serán el punto de partida para el proceso.
+    
+        \item \textbf{Transformación de intervalos:}
+        Una vez que se han identificado todos los intervalos de semillas, el proceso procede de manera similar a lo descrito en la Parte I. Se emplea la función \lstinline{compose} para combinar de manera sucesiva las aplicaciones del método \lstinline{project_intervals} a través de las distintas fases del proceso.
+    
+        Cada fase implica la transformación de los intervalos de semillas, adaptándolos y modificándolos según las especificaciones de cada etapa del proceso. La composición final de estas transformaciones, realizada mediante la función \lstinline{compose}, permite proyectar los intervalos iniciales de semillas a través de todas las etapas, resultando en intervalos transformados que reflejan el efecto acumulativo de todo el proceso.
+    
+        \item \textbf{Resultado final:}
+        El resultado de esta secuencia de transformaciones es un conjunto de intervalos que han sido modificados sucesivamente en cada fase. Estos intervalos finales proporcionan una representación detallada y completa de cómo cada intervalo de semillas se ha transformado a lo largo del proceso. Basta calcular el mínimo de los extremos inferiores de estos intervalos.
+    \end{itemize}
+\end{enumerate}    
+\end{document}

@@ -1,0 +1,109 @@
+% Uso de UTF-8 para la codificación de caracteres
+\usepackage[utf8]{inputenc}
+
+% Configuración para idioma español y T1 para la codificación de fuentes
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+
+% Para funcionalidades sobre listas
+\usepackage{enumitem}
+
+% Paquetes matemáticos
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+% Considerar agregar 'mathtools' para más herramientas matemáticas
+% \usepackage{mathtools}
+
+% Para hiperenlaces en el documento
+\usepackage{hyperref}
+\hypersetup{pdfstartview=FitH}
+
+% Para encabezados y pie de página
+\usepackage[automark]{scrlayer-scrpage}
+
+% Ajustar la altura del encabezado
+\setlength{\headheight}{15pt}
+
+% Para incluir imágenes
+\usepackage{graphicx}
+
+% Para crear enlaces
+\usepackage{hyperref}
+\hypersetup{
+     colorlinks=true,
+     linkcolor=black,
+     filecolor=black,
+     citecolor = black,      
+     urlcolor=blue,
+}
+
+% Para incluir código de programación
+\usepackage{listings}
+
+% Configuración de estilo de página
+\pagestyle{scrheadings}
+
+
+% Configuraciones y comandos personalizados
+\clubpenalty=10000
+\renewcommand{\shorthandsspanish}{}
+\renewcommand*{\deg}{\normalfont\text{gr}\hspace*{1mm}}
+\renewcommand{\Im}{\operatorname{\rm Im}}
+\newcommand{\Log}{\operatorname{\rm Log}}
+\renewcommand{\Re}{\operatorname{\rm Re}}
+\newcommand{\inter}{\operatorname{\rm int}}
+\newcommand{\adh}[1]{\overline{#1}}
+\newcommand{\fr}[1]{\partial{#1}}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\prodesc}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\| #1\right\|}
+\newcommand{\mcm}[1]{\operatorname{\rm mcm}\left(#1\right)}
+\newcommand{\mcd}[1]{\operatorname{\rm mcd}\left(#1\right)}
+\newcommand{\cl}[1]{\left[#1\right]}
+\newcommand{\conj}[1]{\left\lbrace#1\right\rbrace}
+\newcommand{\suc}[1]{\left\lbrace#1\right\rbrace}
+\newcommand{\abs}[1]{\left| #1\right|}
+\newcommand{\ent}[1]{\left\lfloor #1\right\rfloor}
+\newcommand{\eps}{\varepsilon}
+
+% Entornos para teoremas, lemas, etc.
+\newtheorem{teo}{Teorema}[section]
+\newtheorem{prop}{Proposición}[section]
+\newtheorem{lem}{Lema}[section]
+\newtheorem{cor}{Corolario}[section]
+\newtheorem{ejer}{Ejercicio}[section]
+\theoremstyle{definition}
+\newtheorem{df}{Definición}[section]
+\newtheorem{ob}{Observación}[section]
+\newtheorem{obs}{Observaciones}[section]
+\newtheorem{ej}{Ejemplo}[section]
+\newtheorem{ejs}{Ejemplos}[section]
+\newtheorem{nota}{Nota}[section]
+
+% Definiciones de conjuntos numéricos
+\def\NN{\mathbb{N}}
+\def\ZZ{\mathbb{Z}}
+\def\QQ{\mathbb{Q}}
+\def\RR{\mathbb{R}}
+\def\CC{\mathbb{C}}
+\def\PP{\mathbb{P}}
+\def\RP{\RR\PP}
+\def\F{\mathscr{F}}
+\def\G{\mathscr{G}}
+\def\D{\Delta}
+\def\0{\vec{0}}
+\def\a{\vec{a}}
+\def\b{\vec{b}}
+\def\u{\vec{u}}
+\def\p{\vec{p}}
+\def\t{\vec{t}}
+\def\x{\vec{x}}
+\def\y{\vec{y}}
+\def\z{\vec{z}}
+\def\f{\vec{f}}
+\def\g{\vec{g}}
+
+% Configuraciones de dimensiones de página (ajustar si es necesario)
+\addtolength{\textwidth}{4cm}
+\addtolength{\hoffset}{-2cm}
+\addtolength{\textheight}{4cm}
+\addtolength{\voffset}{-2cm}
