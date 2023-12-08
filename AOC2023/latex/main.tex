@@ -84,9 +84,7 @@ El objetivo de esta parte es determinar la ubicación óptima para cada semilla,
     
         Esta técnica se aplica a los objetos \lstinline{Map} creados anteriormente. Cada \lstinline{Map} se asocia con una función específica (método \lstinline{to_fun}), y estas funciones se almacenan en una lista. Posteriormente, se utiliza la función \lstinline{reduce} para combinar secuencialmente todas estas funciones en una sola función compuesta, mediante la aplicación reiterada de \lstinline{compose}.
     
-        La función compuesta final resultante se aplica entonces a la lista de semillas (\lstinline{seeds}). Este proceso permite transformar cada semilla a través de todas las etapas representadas por los mapas de forma secuencial y eficiente. Como resultado, se puede obtener el valor mínimo de ubicación deseado.
-        
-        
+        La función compuesta final resultante se aplica entonces a la lista de semillas (\lstinline{seeds}). Este proceso permite transformar cada semilla a través de todas las etapas representadas por los mapas de forma secuencial y eficiente. Como resultado, se puede obtener el valor mínimo de ubicación deseado.        
     \end{itemize}
         
 \end{enumerate}
@@ -128,5 +126,53 @@ Al final de este proceso compuesto, se obtendrá un conjunto de intervalos trans
         \item \textbf{Resultado final:}
         El resultado de esta secuencia de transformaciones es un conjunto de intervalos que han sido modificados sucesivamente en cada fase. Estos intervalos finales proporcionan una representación detallada y completa de cómo cada intervalo de semillas se ha transformado a lo largo del proceso. Basta calcular el mínimo de los extremos inferiores de estos intervalos.
     \end{itemize}
-\end{enumerate}    
+\end{enumerate}
+
+\section{Día 6: \textnormal{ \it Wait For It}}
+\subsection{Parte I}
+El objetivo de esta parte es determinar de cuantas formas podemos batir el récord de cada carrera de barcos de juguete. Las carreras nos las proporcionan en un fichero con dos registros: el primero contiene los tiempos de duración de cada carrera y el segundo las distancias recorridas. Por ejemplo,
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    Tiempo empleado     & $7$ & $15$ & $30$ \\ \hline
+    Distancia recorrida & $9$ & $40$ & $200$ \\ \hline
+    \end{tabular}
+\end{table}
+
+El barco tiene un botón de forma que si se deja pulsado $t$ milisegundos, éste tomará una velocidad de $t$ milímetros por segundo. Supongamos que la distancia récord para una carrera dada es de $d$ milímetros y que el tiempo empleado en esa carrera fue de $s$ milisegundos, para batir este récord deberá cumplirse:
+$$t(s-t) > d \Longleftrightarrow ts -t^2>d \Longleftrightarrow t^2-ts+d<0$$
+Para que la inecuación anterior tenga soluciones reales, deberá cumplirse que el discriminante de la ecuación cuadrática, $s^2-4d>0$. Sean $t_1$ y $t_2$ con $t_1<t_2$ las raíces del polinomio $P(t)=t^2-ts+d$
+$$t_1 = \frac{s-\sqrt{s^2-4d}}{2}, \quad t_2 = \frac{s+\sqrt{s^2-4d}}{2}$$
+entonces deberá cumplirse que $(t-t_1)(t-t_2)<0$ y puesto que $t_1< t_2$ esto ocurre si y sólo si $t\in (t_1, t_2)$. Como además $t$ debe ser un número entero positivo y menor a $s$.
+
+$$t\in\left[\max(1,\floor(t_1)+1), \min(s-1,\ceil(t_2) -1 )\right]$$
+Por lo que el número de formas del batir el récord debe ser:
+$$\min(s-1,\ceil(t_2) -1 ) - \max(1,\floor(t_1)+1) + 1$$
+
+Esto permite definir una función $f$ que calcula el número de formas de batir el récord al par $(s,d)$ donde $s$ es el tiempo empleado y $d$ la distancia recorrida, mediante la siguiente expresión:
+$$f(s,d)=\min\left(s-1,\ceil\left(\frac{s+\sqrt{s^2-4d}}{2}\right) -1 \right) - \max\left(1,\floor\left(\frac{s-\sqrt{s^2-4d}}{2}\right)+1\right) + 1$$
+
+Para calcular el resultado final, basta mapear esta función sobre la lista de pares $(s,d)$ y plegar la lista resultante mediante la función producto de dos números.
+
+\subsection{Parte II}
+El objetivo de esta parte es el mismo que en la parte anterior, pero suponiendo que solo hay una carrera. Esta carrera se forma concatenando las cifras del tiempo empleado y distancia recorrida respectivamente. En el ejemplo anterior teníamos 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    Tiempo empleado     & $7$ & $15$ & $30$ \\ \hline
+    Distancia recorrida & $9$ & $40$ & $200$ \\ \hline
+    \end{tabular}
+\end{table}
+
+Ahora solo tendremos que considerar esta carrera,
+
+\begin{itemize}
+    \item Tiempo empleado: $71530$
+    \item Distancia recorrida: $940200$
+\end{itemize}
+
+Por la forma en la que se ha resuelto la parte I, no hay que hacer nada adicional el mismo método funciona, ya que no se ha empleado fuerza bruta.
+
 \end{document}
