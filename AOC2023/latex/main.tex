@@ -162,23 +162,13 @@ $$f(s,d)=\min\left(s-1,\ceil\left(\frac{s+\sqrt{s^2-4d}}{2}\right) -1 \right) - 
 Para calcular el resultado final, basta mapear esta función sobre la lista de pares $(s,d)$ y plegar la lista resultante mediante la función producto de dos números.
 
 \subsection{Parte II}
-El objetivo de esta parte es el mismo que en la parte anterior, pero suponiendo que solo hay una carrera. Esta carrera se forma concatenando las cifras del tiempo empleado y distancia recorrida respectivamente. En el ejemplo anterior teníamos 
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{|l|c|c|c|}
-    \hline
-    Tiempo empleado     & $7$ & $15$ & $30$ \\ \hline
-    Distancia recorrida & $9$ & $40$ & $200$ \\ \hline
-    \end{tabular}
-\end{table}
-
-Ahora solo tendremos que considerar esta carrera,
+El objetivo de esta parte es el mismo que en la parte anterior, pero suponiendo que solo hay una carrera. Esta carrera se forma concatenando las cifras del tiempo empleado y distancia recorrida respectivamente. Para el ejemplo anterior, ahora solo tendremos que considerar esta carrera,
 
 \begin{itemize}
     \item Tiempo empleado: $71530$
     \item Distancia recorrida: $940200$
 \end{itemize}
 
-Por la forma en la que se ha resuelto la parte I, no hay que hacer nada adicional el mismo método funciona, ya que no se ha empleado fuerza bruta.
+Por la forma en la que se ha resuelto la parte I, no hay que hacer nada adicional, el mismo método funciona, ya que no se ha empleado fuerza bruta.
 
 \end{document}
