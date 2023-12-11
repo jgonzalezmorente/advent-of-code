@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1702298056 "/Users/prognio/src/advent-of-code/AOC2023/latex/main.tex" "main.pdf" "main" 1702298057 0
-  "/Users/prognio/src/advent-of-code/AOC2023/latex/main.tex" 1702298056 19642 93f489d15992843a7fbb38bf813fadbc ""
+["pdflatex"] 1702298199 "/Users/prognio/src/advent-of-code/AOC2023/latex/main.tex" "main.pdf" "main" 1702298200 0
+  "/Users/prognio/src/advent-of-code/AOC2023/latex/main.tex" 1702298199 20032 fb214256588233eeca2e8f55011b3d5a ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/jknappen/ec/ecbx1200.tfm" 1136768653 3584 402da0b29eafbad07963b1224b222f18 ""
@@ -128,10 +128,10 @@
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1699791545 7883458 fdb503132b5a1ac18feb7aea3433bfea ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
   "config.tex" 1702024620 3085 9429057c20b6f78048197f5cc99afa8d ""
-  "main.aux" 1702298057 1841 b7f86af7b1a122253e512f1485bea75d "pdflatex"
-  "main.out" 1702298057 1200 d1ae309cbbd0750b82465e775af6bb0e "pdflatex"
-  "main.tex" 1702298056 19642 93f489d15992843a7fbb38bf813fadbc ""
-  "main.toc" 1702298057 780 e58e9ffc9bfb95d574803e53c8832d48 "pdflatex"
+  "main.aux" 1702298200 1979 f2038292bd90530c203b6bb8bc96f1ab "pdflatex"
+  "main.out" 1702298200 1362 af3601861309574bb345045e50513254 "pdflatex"
+  "main.tex" 1702298199 20032 fb214256588233eeca2e8f55011b3d5a ""
+  "main.toc" 1702298200 875 9e26cf77c5b57e5ccc3710c665a897d9 "pdflatex"
   (generated)
   "main.aux"
   "main.log"
