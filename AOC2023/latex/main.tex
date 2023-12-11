@@ -171,4 +171,38 @@ El objetivo de esta parte es el mismo que en la parte anterior, pero suponiendo 
 
 Por la forma en la que se ha resuelto la parte I, no hay que hacer nada adicional, el mismo método funciona, ya que no se ha empleado fuerza bruta.
 
+\section{Día 8: \textnormal{ \it Haunted Wasteland }}
+\begin{itemize}
+    \item Enunciado: \\
+    \href{https://adventofcode.com/2023/day/5}{https://adventofcode.com/2023/day/6}
+    \item Solución: \\ 
+    \href{https://github.com/jgonzalezmorente/advent-of-code/blob/main/AOC2023/aoc2023_6.py}{https://github.com/jgonzalezmorente/advent-of-code/blob/main/AOC2023/aoc2023\_6.py}
+\end{itemize}
+
+Nos proporcionan una red formada por dos elementos:
+\begin{itemize}
+    \item Un conjunto de instrucciones para moverse por la red, formado por una sucesión finita de los símbolos $L$ y $R$. Esta sucesión se extienda de manera cíclica. Esto es si la sucesión original es
+    $$I_0, I_1, \dots, I_k, \quad\text{ donde } I_i\in\{L,R\}$$
+    entonces $I_j=I_i$ con $i\equiv j\mod k$ para $j>k$.
+    \item Un conjunto de nodos, de la forma $n_1n_2n_3 = (l_1l_2l_3, r_1r_2r_3)$ donde cada $n_i, l_i, r_i$ son letras mayúsculas, por ejemplo, $AAA=(BBB, CCC)$
+\end{itemize}
+Para movernos por el mapa a partir de un nodo de inicio, basta seguir la sucesión de instrucciones y elegir el nodo correspondiente a $L$ (izquierda) o $R$ (derecha). 
+
+\subsection{Parte I}
+En esta parte, nos piden que calculemos el número de pasos necesarios para ir desde el nodo $AAA$ al nodo $ZZZ$. Para ello solo debemos movernos por el mapa hasta encontrar el nodo deseado. Esto se hace con la función \lstinline{navigate_network}.
+
+\subsection{Parte II}
+
+Este parte requiere calcular la cantidad de pasos necesarios para moverse desde todos los nodos que terminan en $A$ hasta llegar a un conjunto de nodos que finalicen en $Z$. A diferencia de la parte anterior, no es viable utilizar un enfoque de fuerza bruta para este propósito, ya que moverse por la red y verificar en cada paso si todos los nodos resultantes terminan en $Z$ no es una estrategia práctica.
+
+Para abordar este desafío, adoptamos un método más estratégico. Comenzamos desde un nodo específico que termine en $A$ y navegamos a través de la red hasta encontrar un nodo que termine en $Z$. Al alcanzarlo, registramos este nodo junto con el número de pasos que se necesitaron para llegar a él. Luego, continuamos navengdo por la red hasta que nos encontramos de nuevo con el mismo nodo. Si el número de pasos actuales para llegar a este nodo es congruente con el número inicial de pasos (módulo la longitud de las instrucciones), esto indica que hemos completado un ciclo. En este punto, podemos determinar con precisión las posiciones en las que encontraremos nodos que terminan en $Z$, partiendo del nodo inicial.
+
+Formalmente un ciclo es un diccionario cuyas claves son tuplas de la forma $(N_Z, s)$ donde $N_Z$ es un nodo terminado en $Z$ y $s$ es el número de pasos hasta llegar a $N_Z$ partiendo desde el nodo de origen $N_A$. El valor asociado a la clave $(N_Z, s)$ inicialmente es cero y cuando nos encontremos nuevamente con una clave en la que coincide el nodo y los valores de $s$ son congruentes módulo la longitud de las instrucciones, le asignamos como valor la diferencia de pasos.
+
+Ahora calculamos los ciclos de cada uno de los nodos que empiezan en $A$ finalmente basta calcular la intersección de estos conjuntos: 
+
+Si los conjuntos resultantes son de la forma $(m_1), (m_2),\dots, (m_k)$, donde $(m_i)$ denota el conjunto de todos los múltiplos de $m_i$. Resulta que:
+$$(m_1)\cap (m_2)\cap\cdots\cap(m_k)=(\mcm{m_1,m_2,\dots,m_k})$$
+
+Es decir la solución, en este caso, sería el $\mcm{m_1,m_2,\dots,m_k}$.
 \end{document}
