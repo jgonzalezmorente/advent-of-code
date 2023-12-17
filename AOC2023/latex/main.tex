@@ -213,4 +213,195 @@ Si los conjuntos resultantes son de la forma $(m_1), (m_2),\dots, (m_k)$, donde 
 $$(m_1)\cap (m_2)\cap\cdots\cap(m_k)=(\mcm{m_1,m_2,\dots,m_k})$$
 
 Es decir la solución, en este caso, sería el $\mcm{m_1,m_2,\dots,m_k}$.
+
+\section{Día 10: \textnormal{ \it Pipe Maze}}
+\begin{itemize}
+    \item Enunciado: \\
+    \href{https://adventofcode.com/2023/day/10}{https://adventofcode.com/2023/day/10}
+    \item Solución: \\ 
+    \href{https://github.com/jgonzalezmorente/advent-of-code/blob/main/AOC2023/aoc2023_10.py}{https://github.com/jgonzalezmorente/advent-of-code/blob/main/AOC2023/aoc2023\_10.py}
+\end{itemize}
+
+Nos dan una matriz formada por los símbolos |, -, L, J, 7, F, y . Cada uno de estos símbolos representa un trozo de una tubería.
+
+\begin{itemize}[label=$\bullet$]
+    \item | es una tubería vertical que conecta el norte y el sur.
+    \item -- es una tubería horizontal que conecta el este y el oeste.
+    \item L es una curva de 90 grados que conecta el norte y el este.
+    \item J es una curva de 90 grados que conecta el norte y el oeste.
+    \item 7 es una curva de 90 grados que conecta el sur y el oeste.
+    \item F es una curva de 90 grados que conecta el sur y el este.
+    \item . es tierra; no hay ninguna tubería en este punto.
+    \item S es la posición inicial del animal; hay una tubería en este mosaico, pero su boceto no muestra qué forma tiene.
+
+\end{itemize}
+
+\subsection{Parte I}
+En la primera parte del problema hay que determinar el circuito que comienza y acaba en S y calcular el número de pasos que se necesitan para llegar desde la posición inical hasta el punto más alejado.
+
+La idea para encontrar el circuito es la siguiente. Suponiendo que estamos en el punto $p_k\in\ZZ^2$, con vector dirección $\vec{v_k}$. Se determina el vector dirección $\vec{v_{k+1}}$ en función de $\vec{v_k}$ y del tipo de tubería situada en el punto $p_k$.
+
+Obsérvese que para todo $k$, las componentes del vector $\vec{v_k}=(v_{k,0}, v_{k,1})$ pertenecen a $\{-1,0,1\}$.
+
+\begin{itemize}
+    \item Si la tubería en $p_k$ es de tipo |, entonces 
+    $$\vec{v_k}=(0, v_{k-1,1})$$
+    ya que nos movemos en el eje $y$ en la misma dirección con la que llegamos al punto $p_k$.
+    
+    \item Si la tubería en $p_k$ es de tipo --, entonces
+    $$\vec{v_k}=(v_{k-1,0}, 0)$$
+    ya que nos movemos en el eje $x$ en la misma dirección con la que llegamos al punto $p_k$.
+
+    \item Si la tubería en $p_k$ es de tipo L, entonces
+    $$\vec{v_k}=\begin{cases}
+        (1, 0) & \text{si } v_{k-1,1} = 1   \quad \text{(cuando llegamos a L por el norte)}\\
+        (0, -1) & \text{si } v_{k-1,0} = -1  \quad \text{(cuando llegamos a L por el este)}\\
+    \end{cases}$$
+
+    \item Si la tubería en $p_k$ es de tipo J, entonces
+    $$\vec{v_k}=\begin{cases}
+        (-1, 0) & \text{si } v_{k-1,1} = 1   \quad \text{(cuando llegamos a J por el norte)}\\
+        (0, -1) & \text{si } v_{k-1,0} = 1  \quad \text{(cuando llegamos a J por el oeste)}\\
+    \end{cases}$$
+
+    \item Si la tubería en $p_k$ es de tipo 7, entonces
+    $$\vec{v_{k}}=\begin{cases}
+        (0, 1) & \text{si } v_{k-1,1} = 1   \quad \text{(cuando llegamos a 7 por el oeste)}\\
+        (-1, 0) & \text{si } v_{k-1,0} = -1  \quad \text{(cuando llegamos a 7 por el sur)}\\
+    \end{cases}$$
+
+    \item Si la tubería en $p_k$ es de tipo F, entonces
+    $$\vec{v_k}=\begin{cases}
+        (0, 1) & \text{si } v_{k-1,1} = -1   \quad \text{(cuando llegamos a F por el este)}\\
+        (1, 0) & \text{si } v_{k-1,0} = -1  \quad \text{(cuando llegamos a F por el sur)}\\
+    \end{cases}$$
+\end{itemize}
+
+Una vez determinado $\vec{v_k}$, el punto $p_{k+1}$ es,
+$$p_{k+1} = p_k + \vec{v_k}$$
+
+Para iniciar el proceso anterior necesitamos conocer el vector $\vec{v_1}$ el cual se obtiene dependiendo de los tipos de tubería de los puntos situados alrededor de $p_0=S$.
+
+\begin{itemize}
+    \item Si $p_1$ está situado al norte de $S$, esto es $p_1=(p_0, p_1-1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son |, 7 ó F y 
+    $$\vec{v_1}=\begin{cases}
+        (0,-1) & \text{si el tipo de tubería de } p_1\text{ es | } \\
+        (-1,-1) & \text{si el tipo de tubería de } p_1\text{ es 7 } \\
+        (1,-1) & \text{si el tipo de tubería de } p_1\text{ es F } \\
+    \end{cases} $$
+
+    \item Si $p_1$ está situado al sur de $S$, esto es $p_1=(p_0, p_1+1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son |, L ó J y 
+    $$\vec{v_1}=\begin{cases}
+        (0, 1) & \text{si el tipo de tubería de } p_1\text{ es | } \\
+        (1, 1) & \text{si el tipo de tubería de } p_1\text{ es L } \\
+        (-1,1) & \text{si el tipo de tubería de } p_1\text{ es J } \\
+    \end{cases} $$
+    
+    \item Si $p_1$ está situado al este de $S$, esto es $p_1=(p_0+1, p_1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son --, J ó 7 y 
+    $$\vec{v_1}=\begin{cases}
+        (1, 0) & \text{si el tipo de tubería de } p_1\text{ es -- } \\
+        (1, -1) & \text{si el tipo de tubería de } p_1\text{ es J } \\
+        (1, 1) & \text{si el tipo de tubería de } p_1\text{ es 7 } \\
+    \end{cases} $$
+    
+    \item Si $p_1$ está situado al oeste de $S$, esto es $p_1=(p_0-1, p_1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son --, L ó F y 
+    $$\vec{v_1}=\begin{cases}
+        (-1, 0) & \text{si el tipo de tubería de } p_1\text{ es -- } \\
+        (-1, -1) & \text{si el tipo de tubería de } p_1\text{ es L } \\
+        (-1, 1) & \text{si el tipo de tubería de } p_1\text{ es F } \\
+    \end{cases} $$    
+\end{itemize}
+
+Por tanto, para resolver esta parte del problema basta examinar los puntos de alrededor de $S$ y determinar, en base al criterio anterior, cuales es el posible punto $p_1$ y vector $\vec{v_1}$. A partir de aquí se itera mediante la expresión $p_{k+1}=p_{k}+\vec{v_k}$ hasta encontrar el primer $n$ tal que $p_n=S$, es decir, se cierra el circuito. El número de pasos $m$ para llegar al punto más alejado es la mitad del número de puntos del circuito,
+$$m=\frac{n-1}{2}$$
+
+\subsection{Parte II}
+
+En esta parte del problema nos piden que calculemos el número de puntos interiores al circuito. 
+
+En geometría, la triangulación de un polígono o área poligonal es una partición de dicha área en un conjunto de triángulos por un conjunto máximal de diagonales que no se cruzan.
+
+\begin{df}
+    Se llama polígono simple al polígono cuyos lados no contiguos no se intersecan, es decir, que dicho polígono es la frontera de la respectiva área poligonal. 
+\end{df}
+
+Un polígono simple divide al plano que lo contiene en dos conjuntos de puntos: interior de la región poligonal y exterior de la región poligonal. El interior se caracteriza porque no puede contener una recta; el exterior si puede contener una recta. Un polígono que no es simple se denomina polígono complejo.
+
+\begin{df}
+    Una triangulación es una división del área en un conjunto de triángulos que cumplen las condiciones siguientes:
+    \begin{itemize}
+        \item La unión de todos los triángulos es igual al polígono original.
+        \item Los vértices de los triángulos son vértices del polígono original.
+        \item Cualquier pareja de triángulos es disjunta o comparte unicamente un vértice o un lado.
+    \end{itemize}
+\end{df}
+
+\begin{lem}
+    Todo polígono simple de $n$ vértices es triangulizable.
+\end{lem}
+
+\begin{proof}
+    Razonamos por inducción sobre el número de vértices del polígono. Para $n=3$, el polígono es un triángulo por lo que no hay nada que demostrar.
+
+    Sea $n>3$ y supongamos que el resultado es cierto para todo $m<n$ (inducción fuerte) y veamos que es cierto para $n$.
+
+    Veamos en primer lugar que existe una diagonal. Dibujemos el polígono $P$ de $n$ lados. Sea $v$ el vértice (o uno de los vértices) de más hacía la izquierda $P$. Sean $u,w$ los dos vértices vecinos de $v$ en la frontera de $P$. Distinguimos dos casos:
+    \begin{itemize}
+        \item Si el segmento $\overline{uw}$ cae en el interior de $P$, entonces hemos encontrado una diagonal (obsérvese que esto no es necesario pues el polígono no tiene por qué ser convexo). 
+        \item El segmento $\overline{uw}$ no cae completamente en el interior de $P$. Esto quiere decir que existe algún vértice en el interior del triángulo $\triangle uvw$ o sobre la diagonal $\overline{uw}$. De entre estos vértices, elijamos el (o uno de los) más alejado(s) de la diagonal $\overline{uw}$ y llamémosle $v'$. El segmento $\overline{vv'}$ no puede ser cruzado por ningún lado de $P$, porque ese lado tendría un extremo en el interior del triángulo $\triangle uvw$ más alejado de $\overline{uw}$ que $v'$, lo que entra en contradición con la definición de este último. Por lo tanto, $\overline{vv'}$ es una diagonal de $P$.
+    \end{itemize}
+
+    En cualquiera de los casos, hemos encontrado una diagonal. Esta diagonal divide a $P$ en dos subpolígonos de un número de vértices estrictamente menor que $n$. Por hipótesis de inducción, cada uno de esos subpolígonos puede ser triangulado y estas dos triangulaciones, junto con la diagonal encontrada, inducen una triangulación de $P$.
+\end{proof}
+
+
+\begin{teo}[\textbf{de Pick}]
+    Supongamos que tenemos una cuadrícula en la que cada vértice corresponde a un punto del plano cuyas coordenadas son números enteros y sea $P$ un polígono simple que cumple que todos su vértices están situados sobre vértices de cuadrícula. Sea $i$ el número de vértices de la la cuadrícula que quedan dentro del polígono y sea $f$ el número de vértices de la cuadrícula que están en algún lado del polígono, es decir, los puntos frontera que tienen sus dos coordenadas enteras. Entonces el área del polígono puede calcularse de la siguiente forma
+    $$A_P=i+\frac{f}{2}-1$$
+\end{teo}
+
+\begin{proof}
+    Vamos a demostrar el resultado por inducción. Sea $P$ un polígono simple y $T$ un triángulo con un lado común con $P$. Asumimos que el teorema es cierto para $P$ y para $T$ de forma separada y demostraremos que también es cierto para el polígono $PT$ formado a partir de $P$ añadiendo $T$. Como $P$ y $T$ comparten un lado, todos los puntos frontera a lo largo del lado común, excepto los puntos extremos del lado, se convierten en puntos interiores de $PT$. Por tanto, llamando $c$ al número de puntos frontera en común, tenemos que
+    $$i_{PT}=(i_P + i_T) + ( c - 2 ), \quad f_{PT}=(f_P+f_T) - 2(c-2)-2$$
+    Por tanto,
+    $$i_P+i_T = i_{PT}-(c-2), \quad f_P+f_T=f_{PT}+2(c-2)+2$$
+    Como asumimos que el teorema es cierto para $P$ y $T$ de forma separada:
+    \begin{equation*} 
+        \begin{split}            
+            A_{PT} & = A_P + A_T = \left(i_P+\frac{f_P}{2}-1\right) + \left(i_T+\frac{f_T}{2}-1\right) = \\
+                   & = i_{PT} - (c - 2) + \frac{f_{PT}+2(c-2)+2}{2}-2 = i_{PT}+\frac{f_{PT}}{2} - 1
+        \end{split}
+    \end{equation*}
+    Por lo tanto, el polígono $A_{PT}$ cumple el  teorema.
+
+    Por el lema anterior cualquier polígono simple puede ser triangulado. Por tanto, lo que hemos obtenido es que si el teorema es cierto para un triángulo $T$ y para un polígono formado por $n$ triángulos también lo es para un polígono formado por $n+1$ triángulos.
+
+    El último paso de la demostración es comprobar el resultado para cualquier triángulo. Es fácil ver que el teorema es cierto para cualquier cuadrado de lado $1$. De aquí se deduce que es también es cierto para cualquier rectángulo con sus lados paralelos a los ejes. A partir de esto deducimos que la fórmula es cierta para triángulos rectángulos obtenidos a partir de un rectángulo mediante un corte por una de sus diagonales. Finalmente cualquier triángulo puede particionarse en triángulos rectángulos.
+\end{proof}
+
+Por último observemos que si el circuito del problema es $\{p_k\}_{k=0}^n$, podemos calcular el área encerrada, mediante
+$$A=\abs{\sum_{k=0}^n(x_{k+1} - x_k)y_k}, \quad p_k=(x_k,y_k)$$
+la expresión anterior representa la suma de las áreas rectangulares orientadas entre cada dos puntos.
+Esto es un caso particular de la fórmula de Gauss para calcular el área de polígonos simples. También es conocido como el algoritmo de los cordones, debido al consante cruce de productos de las correspondientes coordenadas de cada par de vértices, similar a atar los cordones.
+
+\begin{teo}[Fórmula de Gauss para el área de polígonos simples]
+    Dado un polígono simple de vértices $p_0, p_1,\dots, p_n$ con $p_i=(x_i,y_i)$, y $p_0=p_n$ se tiene que el área $A$ de dicho polígono se puede calcular mediante la expresión
+    $$A=\frac{1}{2}\abs{\sum_{k=0}^nx_ky_{k+1} - x_{k+1}y_k}=\frac{1}{2}\sum_{k=0}^n\det\begin{pmatrix}
+        x_k & x_{k+1} \\
+        y_k & y_{k+1}
+    \end{pmatrix}$$    
+\end{teo}
+
+\begin{proof}
+    El área del polígono es la suma de todas las áreas orientadas de los trapezoides delimitados por cada dos vértices y el eje horizontal, es decir,
+    $$A=\abs{\sum_{k=0}^n(x_{k+1}-x_k)\frac{y_k+y_{k+1}}{2}}$$
+    Desarrollando la expresión anterior y teniendo en cuenta la suma telescópica
+    $$\sum_{k=0}^n(x_{k+1}y_{k+1}-x_ky_k)=x_0y_0-x_ny_n=0$$
+    obtenemos el resultado deseado.    
+\end{proof}
+
+Por lo tanto, teniendo en cuenta ambos teoremas, concluimos que el número de puntos interiores al circuito del problema es
+$$i= \abs{\sum_{k=0}^n(x_{k+1} - x_k)y_k}-\frac{n-1}{2}+1$$
+Obsérvese que $(n-1)/2$ es la solución de la primera parte.
+
 \end{document}
