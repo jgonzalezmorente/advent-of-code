@@ -1,6 +1,6 @@
 from typing import Tuple, Dict, Set, List
 from typing import TypeAlias
-from functools import reduce
+from itertools import pairwise
 
 Z_2: TypeAlias = Tuple[int, int]
 PipeNetworkType: TypeAlias = Dict[ Z_2, str ]
@@ -143,12 +143,8 @@ if __name__ == '__main__':
     steps = ( len(loop.path) - 1 ) // 2
     print( steps )
 
-    # Part II
-    area = 0
-    for k in range( len( loop.path ) - 1 ):
-        area += ( loop.path[k+1][0] - loop.path[k][0] ) * loop.path[k][1]
-    
-    area = abs( area )
+    # Part II    
+    area = abs( sum( map( lambda x: ( x[1][0] - x[0][0] ) * x[0][1], pairwise( loop.path ) ) ) )    
     print( area - steps + 1 )
 
 
