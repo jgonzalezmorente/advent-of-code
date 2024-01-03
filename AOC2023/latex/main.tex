@@ -280,31 +280,31 @@ Obsérvese que para todo $k$, las componentes del vector $\vec{v_k}=(v_{k,0}, v_
 Una vez determinado $\vec{v_k}$, el punto $p_{k+1}$ es,
 $$p_{k+1} = p_k + \vec{v_k}$$
 
-Para iniciar el proceso anterior necesitamos conocer el vector $\vec{v_1}$ el cual se obtiene dependiendo de los tipos de tubería de los puntos situados alrededor de $p_0=S$.
+Para iniciar el proceso anterior necesitamos conocer el vector $\vec{v_1}$ el cual se obtiene dependiendo de los tipos de tubería de los puntos situados alrededor de $p_0=(x_0,y_0)=S$.
 
 \begin{itemize}
-    \item Si $p_1$ está situado al norte de $S$, esto es $p_1=(p_0, p_1-1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son |, 7 ó F y 
+    \item Si $p_1$ está situado al norte de $S$, esto es $p_1=(x_0, y_0-1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son |, 7 ó F y 
     $$\vec{v_1}=\begin{cases}
         (0,-1) & \text{si el tipo de tubería de } p_1\text{ es | } \\
         (-1,-1) & \text{si el tipo de tubería de } p_1\text{ es 7 } \\
         (1,-1) & \text{si el tipo de tubería de } p_1\text{ es F } \\
     \end{cases} $$
 
-    \item Si $p_1$ está situado al sur de $S$, esto es $p_1=(p_0, p_1+1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son |, L ó J y 
+    \item Si $p_1$ está situado al sur de $S$, esto es $p_1=(x_0, y_0+1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son |, L ó J y 
     $$\vec{v_1}=\begin{cases}
         (0, 1) & \text{si el tipo de tubería de } p_1\text{ es | } \\
         (1, 1) & \text{si el tipo de tubería de } p_1\text{ es L } \\
         (-1,1) & \text{si el tipo de tubería de } p_1\text{ es J } \\
     \end{cases} $$
     
-    \item Si $p_1$ está situado al este de $S$, esto es $p_1=(p_0+1, p_1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son --, J ó 7 y 
+    \item Si $p_1$ está situado al este de $S$, esto es $p_1=(x_0+1, y_0)$, entonces los posibles tipos de tubería que puede tener $p_1$ son --, J ó 7 y 
     $$\vec{v_1}=\begin{cases}
         (1, 0) & \text{si el tipo de tubería de } p_1\text{ es -- } \\
         (1, -1) & \text{si el tipo de tubería de } p_1\text{ es J } \\
         (1, 1) & \text{si el tipo de tubería de } p_1\text{ es 7 } \\
     \end{cases} $$
     
-    \item Si $p_1$ está situado al oeste de $S$, esto es $p_1=(p_0-1, p_1)$, entonces los posibles tipos de tubería que puede tener $p_1$ son --, L ó F y 
+    \item Si $p_1$ está situado al oeste de $S$, esto es $p_1=(x_0-1, y_0)$, entonces los posibles tipos de tubería que puede tener $p_1$ son --, L ó F y 
     $$\vec{v_1}=\begin{cases}
         (-1, 0) & \text{si el tipo de tubería de } p_1\text{ es -- } \\
         (-1, -1) & \text{si el tipo de tubería de } p_1\text{ es L } \\
@@ -404,4 +404,29 @@ Por lo tanto, teniendo en cuenta ambos teoremas, concluimos que el número de pu
 $$i= \abs{\sum_{k=0}^n(x_{k+1} - x_k)y_k}-\frac{n-1}{2}+1$$
 Obsérvese que $(n-1)/2$ es la solución de la primera parte.
 
+\section{Día 12: \textnormal{ \it Hot Springs}}
+\begin{itemize}
+    \item Enunciado: \\
+    \href{https://adventofcode.com/2023/day/12}{https://adventofcode.com/2023/day/12}
+    \item Solución: \\ 
+    \href{https://github.com/jgonzalezmorente/advent-of-code/blob/main/AOC2023/aoc2023_12.py}{https://github.com/jgonzalezmorente/advent-of-code/blob/main/AOC2023/aoc2023\_12.py}
+\end{itemize}
+
+\subsection{Parte I}
+
+En este problema nos dan una sucesión de registros proporcionados en un fichero de texto. Cada registro consta de dos partes:
+\begin{itemize}
+    \item Una máscara representada como sucesión de símbolos \lstinline{.} \lstinline{#} \lstinline{?}. Los \lstinline{.} denotan resortes operativos, los \lstinline{#} resortes defectuosos y los \lstinline{?} pueden ser \lstinline{.} o \lstinline{#}. Por ejemplo, \lstinline{.??..??...?##.}
+    \item Una sucesión de números. Cada número representa un grupo de resortes defectuosos juntos. Cada grupo está separado por un \lstinline{.} y deben aparecer en ese orden en la máscara. Por ejemplo, $1,1,3$ indica que en la máscara debe aparecer un grupo de un primer grupo de un solo \lstinline{#}, un segundo grupo de un solo \lstinline{#} y un tercer y último grupo formado por \lstinline{###}.
+\end{itemize}
+
+El objetivo es contar a partir de cada máscara y sucesión de grupos, cuantas formas posibles hay. Por ejemplo, para
+\lstinline{.??..??...?##. 1,1,3} hay cuatro formas posibles:
+
+\begin{enumerate}[label=(\arabic*)]
+    \item \lstinline{.#...#....###.}
+    \item \lstinline{.#....#...###.}
+    \item \lstinline{..#..#....###.}
+    \item \lstinline{..#...#...###.}
+\end{enumerate}
 \end{document}
