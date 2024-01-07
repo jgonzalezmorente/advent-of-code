@@ -19,7 +19,7 @@ class MirrorLine:
 
     def __eq__( self, mirrorLine: object ) -> bool:
         if not isinstance( mirrorLine, MirrorLine ):
-            return NotImplemented        
+            return NotImplemented
         if self.data == mirrorLine.data:
             return True
         if not MirrorLine.compare_with_smudge or MirrorLine.__smudge_detected:
