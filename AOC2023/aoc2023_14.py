@@ -129,9 +129,9 @@ if __name__ == '__main__':
             for x, r in enumerate( line ):
                 match r:
                     case 'O':
-                        original_platform.add_rock( RoundedRock( x, y) )
+                        original_platform.add_rock( RoundedRock(x, y) )
                     case '#':
-                        original_platform.add_rock( CubeRock( x, y) )
+                        original_platform.add_rock( CubeRock(x, y) )
     
     # Part I
     platform = deepcopy( original_platform )
@@ -146,8 +146,7 @@ if __name__ == '__main__':
         cycle.append( deepcopy( platform ) )        
         for direction in [(0, -1), (-1, 0), (0, 1), (1, 0)]:
             platform.slide( direction )
-        x+=1
 
     n = cycle.index( platform )    
-    x = n + ( 1000000000 - n ) % ( len( cycle ) - n )    
-    print( cycle[x].total_load )
+    m = n + ( 1000000000 - n ) % ( len( cycle ) - n )
+    print( cycle[m].total_load )
