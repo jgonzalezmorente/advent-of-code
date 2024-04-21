@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np # type: ignore
 from helpers.functions import tree_is_visible, tree_score
 
 if __name__ == '__main__':
