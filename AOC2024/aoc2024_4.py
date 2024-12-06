@@ -17,8 +17,8 @@ def get_neighbors_with_condition(word_search, i, j, char):
         for s in range(-1, 2):
             x, y = i + k, j + s
             if (k != 0 or s != 0) and is_within_bounds(word_search.shape, x, y) and word_search[x, y] == char:
-                neighbors.append((x, y))
-    return neighbors
+                neighbors.append([x, y])
+    return np.array(neighbors)
 
 def count_pattern_X(word_search):
     indexes_starting_with_X = np.where(word_search == 'X')
@@ -26,13 +26,16 @@ def count_pattern_X(word_search):
     for i, j in zip(indexes_starting_with_X[0], indexes_starting_with_X[1]):
         neighbors = get_neighbors_with_condition(word_search, i, j, 'M')
         for p in neighbors:
-            values = []
-            for k in range(1, 3):
-                q = (p[0] + k * (p[0] - i), p[1] + k * (p[1] - j))
-                if is_within_bounds(word_search.shape, q[0], q[1]):
-                    values.append(word_search[q[0], q[1]])
-            if values == ['A', 'S']:
-                result += 1
+            v = p - np.array([i, j])
+            pos_v = p + v
+            pos_2v = pos_v + v
+            if (is_within_bounds(word_search.shape, pos_v[0], pos_v[1]) and is_within_bounds(word_search.shape, pos_2v[0], pos_2v[1])):
+                values = [
+                    word_search[pos_v[0], pos_v[1]],
+                    word_search[pos_2v[0], pos_2v[1]],
+                ]
+                if values == ['A', 'S']:
+                    result += 1
     return result
 
 def count_pattern_A(word_search):
@@ -59,4 +62,4 @@ if __name__ == '__main__':
     print(f'Parte 1 (XMAS): {result_X}')
 
     result_A = count_pattern_A(word_search)
-    print(f'Parte 2 (X-MAX): {result_A}')
+    print(f'Parte 2 (X-MAS): {result_A}')
