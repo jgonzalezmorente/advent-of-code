@@ -1,8 +1,6 @@
 from collections import defaultdict
 import numpy as np
 
-x = []
-
 def read_and_parse_file(file_path):
     try:
         with open(file_path, 'r') as f:
