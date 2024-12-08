@@ -1,4 +1,4 @@
-from functools import lru_cache, cmp_to_key, partial
+from functools import lru_cache, cmp_to_key
 
 def read_and_parse_file(file_path):
     page_ordering_rules = []
@@ -36,7 +36,7 @@ def read_and_parse_file(file_path):
         print(f"Error inesperado al leer el archivo {file_path}: {e}")
         return None
 
-# @lru_cache(maxsize=None)
+@lru_cache(maxsize=None)
 def is_printed_before(page1, page2, rules):
     if (page1, page2) in rules:
         return True
