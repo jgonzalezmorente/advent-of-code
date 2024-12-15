@@ -2,11 +2,8 @@ from functools import reduce
 import re
 
 def read_and_parse_file(file_path):
-    try:
-        with open(file_path, 'r') as f:
-            return ''.join([line.strip() for line in f])
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró')
+    with open(file_path, 'r') as f:
+        return ''.join([line.strip() for line in f])
 
 def get_sum_mul(memory):
     pattern = r'mul\((\d+),\s*(\d+)\)'

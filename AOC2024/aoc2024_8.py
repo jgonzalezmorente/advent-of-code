@@ -19,23 +19,14 @@ class Point:
 def read_and_parse_file(file_path):
     city = {}
     antennas = defaultdict(list)
-    try:
-        with open(file_path, 'r') as f:
-            for y, line in enumerate(f):
-                for x, value in enumerate(list(line.strip())):
-                    point = Point(x, y, value)
-                    city[(x,y)] = point
-                    if point.is_antenna():
-                        antennas[point.value].append(point)
-
-        return city, antennas
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró.')
-        return None
-    except Exception as e:
-        print(f"Error inesperado al leer el archivo {file_path}: {e}")
-        return None
-
+    with open(file_path, 'r') as f:
+        for y, line in enumerate(f):
+            for x, value in enumerate(list(line.strip())):
+                point = Point(x, y, value)
+                city[(x,y)] = point
+                if point.is_antenna():
+                    antennas[point.value].append(point)
+    return city, antennas
 
 if __name__ == '__main__':
     inputs = 'inputs/day8.txt'

@@ -1,18 +1,11 @@
 from copy import deepcopy
 def read_and_parse_file(file_path):
     equations = []
-    try:
-        with open(file_path, 'r') as f:
-            for line in f:
-                result, numbers = line.strip().split(':')
-                equations.append((int(result), [int(x) for x in numbers.split()]))
-        return equations
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró.')
-        return None
-    except Exception as e:
-        print(f"Error inesperado al leer el archivo {file_path}: {e}")
-        return None
+    with open(file_path, 'r') as f:
+        for line in f:
+            result, numbers = line.strip().split(':')
+            equations.append((int(result), [int(x) for x in numbers.split()]))
+    return equations
 
 def equation_is_valid(result, numbers, p2=False):
     if not numbers:

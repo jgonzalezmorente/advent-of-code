@@ -1,12 +1,8 @@
 import numpy as np
 
 def read_and_parse_file(file_path):
-    try:
-        with open(file_path, 'r') as f:
-            return [list(line.strip()) for line in f]
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró')
-        return []
+    with open(file_path, 'r') as f:
+        return [list(line.strip()) for line in f]
 
 def is_within_bounds(shape, x, y):
     return 0 <= x < shape[0] and 0 <= y < shape[1]

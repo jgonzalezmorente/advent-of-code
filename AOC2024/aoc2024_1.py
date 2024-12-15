@@ -3,16 +3,11 @@ from collections import Counter
 
 def read_and_parse_file(file_path):
     list1, list2 = [], []
-    try:
-        with open(file_path, 'r') as f:
-            for line in f:
-                values = line.strip().split()
-                list1.append(int(values[0]))
-                list2.append(int(values[1]))
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró')
-    except ValueError:
-        print(f'Error: No se pudo convertir los datos del archivo {file_path} a enteros')
+    with open(file_path, 'r') as f:
+        for line in f:
+            values = line.strip().split()
+            list1.append(int(values[0]))
+            list2.append(int(values[1]))
     return list1, list2
 
 def calculate_difference_sum(list1, list2):

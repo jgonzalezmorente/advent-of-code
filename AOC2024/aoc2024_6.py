@@ -2,16 +2,9 @@ from collections import defaultdict
 import numpy as np
 
 def read_and_parse_file(file_path):
-    try:
-        with open(file_path, 'r') as f:
-            lines = f.readlines()
-        return [list(line.strip()) for line in lines]
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró.')
-        return None
-    except Exception as e:
-        print(f"Error inesperado al leer el archivo {file_path}: {e}")
-        return None
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+    return [list(line.strip()) for line in lines]
 
 def is_inside(point, shape):
     return 0 <= point[1] < shape[0] and 0 <= point[0] < shape[1]

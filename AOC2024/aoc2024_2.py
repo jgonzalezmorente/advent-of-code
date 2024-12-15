@@ -1,14 +1,8 @@
 from functools import partial
 
 def read_and_parse_file(file_path):
-    try:
-        with open(file_path, 'r') as f:
-            return [[int(n) for n in line.strip().split()] for line in f]
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró')
-    except ValueError:
-        print(f'Error: No se pudo convertir los datos del archivo {file_path} a enteros')
-    return []
+    with open(file_path, 'r') as f:
+        return [[int(n) for n in line.strip().split()] for line in f]
 
 def sign(x):
     return (x > 0) - (x < 0)

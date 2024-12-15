@@ -3,38 +3,30 @@ from functools import lru_cache, cmp_to_key
 def read_and_parse_file(file_path):
     page_ordering_rules = []
     pages_update = []
-    try:
-        with open(file_path, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
+    with open(file_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
 
-                # Procesa líneas con '|'
-                if '|' in line:
-                    try:
-                        parts = line.split('|')
-                        page_ordering_rules.append((int(parts[0]), int(parts[1])))
-                    except ValueError as e:
-                        print(f"Error al procesar la línea '{line}': {e}")
-                        return None
+            # Procesa líneas con '|'
+            if '|' in line:
+                try:
+                    parts = line.split('|')
+                    page_ordering_rules.append((int(parts[0]), int(parts[1])))
+                except ValueError as e:
+                    print(f"Error al procesar la línea '{line}': {e}")
+                    return None
 
-                # Procesa líneas con ','
-                elif ',' in line:
-                    try:
-                        pages_update.append([int(x) for x in line.split(',')])
-                    except ValueError as e:
-                        print(f"Error al procesar la línea '{line}': {e}")
-                        return None
+            # Procesa líneas con ','
+            elif ',' in line:
+                try:
+                    pages_update.append([int(x) for x in line.split(',')])
+                except ValueError as e:
+                    print(f"Error al procesar la línea '{line}': {e}")
+                    return None
 
-        return tuple(page_ordering_rules), pages_update
-
-    except FileNotFoundError:
-        print(f'Error: El archivo {file_path} no se encontró.')
-        return None
-    except Exception as e:
-        print(f"Error inesperado al leer el archivo {file_path}: {e}")
-        return None
+    return tuple(page_ordering_rules), pages_update
 
 @lru_cache(maxsize=None)
 def is_printed_before(page1, page2, rules):
