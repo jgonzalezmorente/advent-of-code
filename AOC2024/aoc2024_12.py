@@ -1,19 +1,11 @@
 from itertools import chain
+from collections import Counter
 from typing import Dict
 
 class Plot:
     def __init__(self, x, y):
         self.point = (x, y)
-
-    def __eq__(self, value):
-        if isinstance(value, Plot):
-            return self.point == value.point
-        return False
-
-    @property
-    def corners(self):
-        x, y = self.point
-        return [(x + dx, y + dy) for dx, dy in [(0, 0), (1, 0), (1, 1), (0, 1)]]
+        self.corners = [(x + dx, y + dy) for dx, dy in [(0, 0), (1, 0), (1, 1), (0, 1)]]
 
 class Region:
     def __init__(self, plant_type, initial_plot):
@@ -31,11 +23,24 @@ class Region:
         return len(self.plots)
 
     @property
+    def number_of_sides(self):
+        counter = Counter(chain.from_iterable(p.corners for p in self.plots))
+        sides = 0
+        for p, v in counter.items():
+            if v in {1, 3}:
+                sides += 1
+            elif v == 2 and len(set(chain.from_iterable(plot.corners for plot in self.plots if p in plot.corners))) == 7:
+                sides += 2
+        return sides
+    @property
     def price(self):
         return self.area * self.perim
 
+    @property
+    def price_from_sides(self):
+        return self.area * self.number_of_sides
+
     def intersects_to(self, plot: Plot):
-        #return not set(chain.from_iterable(p.corners for p in self.plots)).isdisjoint(plot.corners)
         _, _, _, _, count = self.get_adjacent(plot)
         return count > 0
 
@@ -94,10 +99,10 @@ def read_and_parse_file(file_path):
                     garden[value] = disjoin_regions + [region_union] if region_union else disjoin_regions
     return garden
 
-
 if __name__ == '__main__':
     inputs = 'inputs/day12.txt'
     sample = 'samples/day12.txt'
 
     garden = read_and_parse_file(inputs)
     print(sum(region.price for region in chain.from_iterable(garden.values())))
+    print(sum(region.price_from_sides for region in chain.from_iterable(garden.values())))
