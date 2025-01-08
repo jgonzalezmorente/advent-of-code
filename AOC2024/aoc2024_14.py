@@ -2,6 +2,7 @@ import re
 from typing import Tuple
 from collections import deque
 from functools import reduce
+import numpy as np
 
 class Robot:
     def __init__(self, position: Tuple[int, int], velocity: Tuple[int, int]):
@@ -13,12 +14,30 @@ class Area:
         self.shape = shape
         self.area = {(x, y): deque([]) for x in range(shape[1]) for y in range(shape[0])}
 
+    def __str__(self):
+        result = ''
+        for row in range(self.shape[0]):
+            result += ''.join(str(len(self.area[(col, row)])) if len(self.area[(col, row)]) != 0 else '.' for col in range(self.shape[1])) + '\n'
+        return result
+
     def add_robot(self, robot: Robot):
         if robot.position in self.area:
             self.area[robot.position].append(robot)
 
+    @property
+    def robot_distribution(self):
+        return {position: len(robots) for position, robots in self.area.items()}
+
+    @property
+    def grid(self):
+        current_distribution = self.robot_distribution
+        grid = np.zeros(self.shape, dtype=int)
+        for position, robots in current_distribution.items():
+            grid[position[1], position[0]] = robots
+        return grid
+
     def teleport(self):
-        current_number_robots = { position: len(robots) for position, robots in self.area.items() }
+        current_number_robots = self.robot_distribution
         for position, robots in self.area.items():
             if len(robots) == 0:
                 continue
@@ -45,14 +64,13 @@ class Area:
                     counts[3] += len(robots)
         return reduce(lambda acc, x: acc * x, counts)
 
-    def is_christmas_tree(self):
-        pass
+    def calculate_local_distributions(self, window_size: int):
+        grid = self.grid
+        print(grid)
 
-    def __str__(self):
-        result = ''
-        for row in range(self.shape[0]):
-            result += ''.join(str(len(self.area[(col, row)])) if len(self.area[(col, row)]) != 0 else '.' for col in range(self.shape[1])) + '\n'
-        return result
+
+
+
 
 def read_and_parse_file(file_path: str, area: Area):
     pattern = r'p=(-?\d+),(-?\d+)\sv=(-?\d+),(-?\d+)'
@@ -70,11 +88,20 @@ if __name__ == '__main__':
     sample = 'samples/day14.txt'
 
     #area = Area((7, 11))
-    area = Area((103, 101))
-    read_and_parse_file(inputs, area)
+    part1, part2 = False, True
 
-    for _ in range(100):
-        area.teleport()
-    print(area)
-    print(area.safety_factor())
+    if part1:
+        area = Area((103, 101))
+        read_and_parse_file(inputs, area)
+        for _ in range(100):
+            area.teleport()
+        print(area.safety_factor())
+
+    if part2:
+        area = Area((103, 101))
+        read_and_parse_file(inputs, area)
+        area.calculate_local_distributions(5)
+
+
+
 
